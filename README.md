@@ -4,6 +4,7 @@ In, this project I have just created a "Password Complexity Checker" that user c
 A Password Complexity Checker is a tool designed to evaluate the strength and security of a password based on specific criteria. Its main purpose is to ensure that passwords are difficult for attackers to guess or crack, enhancing overall security.
 
 Key Features:
+
 1)Length Validation
 
 *Checks if the password meets a minimum length requirement (e.g., 8 or more characters).
