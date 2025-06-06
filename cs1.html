@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Password Strength Checker</title>
+<link rel="stylesheet" href="cs1.css"
+
+
+  
+<head>
+<body>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">Password Complexity Checker</h1>
+    <label for="password-input">Enter your password:</label>
+    <input type="password" id="password-input" aria-describedby="strength-text" autocomplete="new-password" />
+
+    <div class="strength-meter" aria-hidden="true">
+      <div class="strength-meter-fill" id="strength-meter-fill"></div>
+    </div>
+    <div class="strength-text" id="strength-text" aria-live="polite" aria-atomic="true"></div>
+
+    <ul class="criteria-list" id="criteria-list">
+      <li id="length-criteria">At least 8 characters</li>
+      <li id="uppercase-criteria">Contains uppercase letter(s)</li>
+      <li id="lowercase-criteria">Contains lowercase letter(s)</li>
+      <li id="number-criteria">Contains number(s)</li>
+      <li id="special-criteria">Contains special character(s)</li>
+    </ul>
+  </div>
+
+<script>
+  (() => {
+    const passwordInput = document.getElementById('password-input');
+    const strengthMeterFill = document.getElementById('strength-meter-fill');
+    const strengthText = document.getElementById('strength-text');
+
+    const criteria = {
+      length: document.getElementById('length-criteria'),
+      uppercase: document.getElementById('uppercase-criteria'),
+      lowercase: document.getElementById('lowercase-criteria'),
+      number: document.getElementById('number-criteria'),
+      special: document.getElementById('special-criteria')
+    };
+
+    function checkCriteria(password) {
+      return {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^A-Za-z0-9]/.test(password)
+      };
+    }
+
+    function calculateStrength(criteriaResults) {
+      let score = 0;
+      for(const key in criteriaResults) {
+        if(criteriaResults[key]) score++;
+      }
+      return score; 
+    }
+
+    function updateVisuals(score, criteriaResults) {
+      
+      for(const key in criteriaResults) {
+        if(criteriaResults[key]) {
+          criteria[key].classList.add('criteria-met');
+        } else {
+          criteria[key].classList.remove('criteria-met');
+        }
+      }
+
+      
+      let widthPercent = (score / 5) * 100;
+      strengthMeterFill.style.width = widthPercent + '%';
+
+      let color = '#ff4d4d'; 
+      let text = 'Very Weak';
+
+      if(score === 0) {
+        color = '#ccc';
+        text = '';
+      } else if (score === 1) {
+        color = '#ff4d4d';
+        text = 'Very Weak';
+      } else if (score === 2) {
+        color = '#ff9649'; 
+        text = 'Weak';
+      } else if (score === 3) {
+        color = '#ffd700'; 
+        text = 'Medium';
+      } else if (score === 4) {
+        color = '#9bdeac'; 
+        text = 'Strong';
+      } else if (score === 5) {
+        color = '#4caf50'; 
+        text = 'Very Strong';
+      }
+
+      strengthMeterFill.style.backgroundColor = color;
+      strengthText.textContent = text;
+    }
+
+    passwordInput.addEventListener('input', e => {
+      const password = e.target.value;
+      const criteriaResults = checkCriteria(password);
+      const score = calculateStrength(criteriaResults);
+      updateVisuals(score, criteriaResults);
+    });
+  })();
+</script>
+</head>
+</body>
+</html>
+
